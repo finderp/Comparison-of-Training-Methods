@@ -1,1 +1,1 @@
-Plots used in the thesis
+# Some of the Plots used in the thesis
