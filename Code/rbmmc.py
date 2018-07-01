@@ -7,7 +7,7 @@ from matplotlib.legend_handler import HandlerLine2D
 import numpy as np
 import random
 import sys
-from pylab import *
+# from pylab import *
 
 def loaddata(filename): # input string
 	array = np.loadtxt("%s" %filename)
@@ -98,7 +98,8 @@ def trainmc(params,data,epochs,lr,T,err,plot):
 	if plot:
 		analysis(errorp,errorerr,plikep)
 
-	return [errorp,errorerr] #[weights,hidden,shidden]
+	return [weights,hidden,shidden] #[errorp,errorerr]
+# use [errorp,errorerr] for MRE plots
 
 def energy_h(params,data,x):
 	weights,hidden,shidden = params
@@ -256,24 +257,16 @@ def plot_feature(weights):
 
 
 ################### main ######################
-# RBM size and parameters
 nv,nh = 28*28,100
-ndata = 10
-epochs = 200
+ndata = 2
+epochs = 100
 lr = 0.001
 
-'''
-print('generating data')
-np_rng3 = np.random.RandomState(1000)
-data = np_rng3.randint(2,size=(10,nv))
-ndata = len(data)
-'''
-
 # mnist data set
-# randomly choose some data for training
 print("loading data ...")
-idx = 6 #6
-datar = loaddata('mnist01s')[idx:idx+ndata]*2-1 #[0:10]*2-1
+idx = 0
+data = loaddata('mnist01s')[idx:idx+ndata]*2-1 #[0:10]*2-1
+
 
 # mnist train with mc
 ndata = len(data)
@@ -286,7 +279,6 @@ plot_feature(weights)
 
 '''
 # MRE after 200 epochs for various batch sizes depending on temperature
-# change data to datar when loading MNIST data
 ndataarr = [1,4,5,10]
 temp = [1./1000,1./500,1./100,1./50,1./25,1./10,1./5,1./2,1.,2.,10.,25.,50.,100.,500.,1000.,2000.,5000.]
 colors = cm.YlGnBu(np.linspace(0.3,1,len(ndataarr)))
@@ -340,9 +332,6 @@ plt.legend(loc='upper right',fontsize=14,numpoints=1)
 plt.suptitle(r'$n_v = %i,\ n_h = %i,\ n_{data} = %i,\ lr = %.3f$' %(nv,nh,ndata,lr),fontsize=20)
 plt.show()
 '''
-
-#plt.fill_between(np.arange(1,epochs+1),errorp-recerr,errorp+recerr,\
-#					alpha=0.5,facecolor='LightBlue',edgecolor='LightBlue',antialiased=True)
 
 '''
 # Plot of the MRE depending on the amount of hidden units
